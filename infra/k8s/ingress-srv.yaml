@@ -12,5 +12,5 @@ spec:
         paths:
           - path: /api/users/(.*)
             backend:
-              serviceName: auth-src
+              serviceName: auth-svc
               servicePort: 3000
