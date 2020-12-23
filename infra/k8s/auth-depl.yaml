@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: tykola/auth
+          image: tykola/authbc
 ---
 apiVersion: v1
 kind: Service
