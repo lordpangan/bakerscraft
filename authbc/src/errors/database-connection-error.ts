@@ -1,9 +1,11 @@
-export class DatabaseConnectionError extends Error {
+import { CusterError } from './custom-errors';
+
+export class DatabaseConnectionError extends CusterError {
   statusCode = 500;
   reason = 'Error connecting to database';
 
   constructor() {
-    super();
+    super('Error connecting to database');
 
     // only because we are extending a built in class
     Object.setPrototypeOf(this, DatabaseConnectionError.prototype);
