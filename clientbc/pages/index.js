@@ -1,34 +1,19 @@
-import axios from 'axios';
+import buildClient from '../api/build-client';
 
 const LandingPage = ({ currentUser }) => {
   console.log(currentUser);
-
-  return <h1>Landing Page</h1>;
+  return currentUser ? (
+    <h1>You are signed in</h1>
+  ) : (
+    <h1>You are NOT signed in</h1>
+  );
 };
 
-LandingPage.getInitialProps = async () => {
-  if (typeof window === 'undefined') {
-    // we are on the server
-    // request should be made to the ingress kube fqdn
-    const { data } = await axios.get(
-      'http://ingress-nginx-controller.kube-system.svc/api/users/currentuser',
-      {
-        headers: {
-          Host: 'bakerscraft.com',
-        },
-      }
-    );
+LandingPage.getInitialProps = async (context) => {
+  const client = buildClient(context);
+  const { data } = await client.get('/api/users/currentuser');
 
-    return data;
-  } else {
-    // we are on the broser!
-    // request can be made with a base url of ''
-    const { data } = await axios.get('/api/users/currentuser');
-
-    return data;
-  }
-
-  return {};
+  return data;
 };
 
 export default LandingPage;
