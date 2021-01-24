@@ -3,11 +3,12 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
+import { NotFoundError, errorHandler } from '@lordpangan/common';
+
 import { currentUserRouter } from './routes/current-user';
 import { signInRouter } from './routes/signin';
 import { signUpRouter } from './routes/signup';
 import { signOutRouter } from './routes/signout';
-import { NotFoundError, errorHandler } from '@lordpangan/common';
 
 const app = express();
 app.set('trust proxy', true);
