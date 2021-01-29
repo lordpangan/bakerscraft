@@ -18,7 +18,7 @@ it('returns the product if the product is found', async () => {
 
   const reponse = await request(app)
     .post('/api/products')
-    .set('Cookie', global.signin())
+    .set('Cookie', global.signinAdmin())
     .send({
       title,
       price,
