@@ -1,6 +1,10 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { requireAuth, validateRequest } from '@lordpangan/common';
+import {
+  requireAuth,
+  requireAuthAdmin,
+  validateRequest,
+} from '@lordpangan/common';
 import { Product } from '../models/products';
 
 const router = express.Router();
@@ -8,6 +12,7 @@ const router = express.Router();
 router.post(
   '/api/products',
   requireAuth,
+  requireAuthAdmin,
   [
     body('title').not().isEmpty().withMessage('Title is required'),
     body('price')
