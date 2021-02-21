@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Product } from '../../models/products';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('has a router handler listening to /api/ticekts for post request', async () => {
   const response = await request(app).post('/api/products').send({});
@@ -117,4 +118,23 @@ it('create a product with valid inputs', async () => {
   expect(product.length).toEqual(1);
   expect(product[0].price).toEqual(10);
   expect(product[0].title).toEqual(title);
+});
+
+it('publishes an event', async () => {
+  let product = await Product.find({});
+  expect(product.length).toEqual(0);
+
+  const title = 'flour';
+
+  await request(app)
+    .post('/api/products')
+    .set('Cookie', global.signinAdmin())
+    .send({
+      title,
+      price: 10,
+      quantity: 0,
+    })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

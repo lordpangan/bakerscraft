@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns 404 if the provided product id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -158,4 +159,33 @@ it('updates the products provided valid inputs', async () => {
 
   expect(productResponse.body.title).toEqual('choclat');
   expect(productResponse.body.price).toEqual(1000);
+});
+
+it('publishes an event', async () => {
+  const id = new mongoose.Types.ObjectId().toHexString();
+  const title = 'flour';
+  const price = 10;
+  const quantity = 0;
+
+  const response = await request(app)
+    .post(`/api/products/`)
+    .set('Cookie', global.signinAdmin())
+    .send({
+      title,
+      price,
+      quantity,
+    })
+    .expect(201);
+
+  await request(app)
+    .put(`/api/products/${response.body.id}`)
+    .set('Cookie', global.signinAdmin())
+    .send({
+      title: 'choclat',
+      price: 1000,
+      quantity: 5,
+    })
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
