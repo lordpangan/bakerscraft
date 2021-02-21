@@ -19,7 +19,7 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    const auth = 'customer';
+    const auth = 'admin';
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -34,6 +34,7 @@ router.post(
       {
         id: user.id,
         email: user.email,
+        auth: user.auth,
       },
       process.env.JWT_KEY!
     );
