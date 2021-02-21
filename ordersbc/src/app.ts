@@ -5,10 +5,10 @@ import cookieSession from 'cookie-session';
 
 import { NotFoundError, errorHandler, currentUser } from '@lordpangan/common';
 
-import { createProductRouter } from './routes/new';
-import { showProductRouter } from './routes/show';
-import { indexProductRouter } from './routes/index';
-import { updateProductRouter } from './routes/update';
+import { deleteOrderRouter } from './routes/delete';
+import { indexOrderRouter } from './routes/index';
+import { showOrderRouter } from './routes/show';
+import { newOrderRouter } from './routes/new';
 
 const app = express();
 app.set('trust proxy', true);
@@ -21,10 +21,10 @@ app.use(
 );
 app.use(currentUser);
 
-app.use(createProductRouter);
-app.use(showProductRouter);
-app.use(indexProductRouter);
-app.use(updateProductRouter);
+app.use(deleteOrderRouter);
+app.use(indexOrderRouter);
+app.use(showOrderRouter);
+app.use(newOrderRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
