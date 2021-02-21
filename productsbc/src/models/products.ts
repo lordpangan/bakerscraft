@@ -1,21 +1,21 @@
 import mongoose from 'mongoose';
 
-interface ProductsAttrs {
+interface ProductAttrs {
   title: string;
   price: number;
   userId: string;
   quantity: number;
 }
 
-interface ProductsDoc extends mongoose.Document {
+interface ProductDoc extends mongoose.Document {
   title: string;
   price: number;
   userId: string;
   quantity: number;
 }
 
-interface ProductsModel extends mongoose.Model<ProductsDoc> {
-  build(attrs: ProductsAttrs): ProductsDoc;
+interface ProductModel extends mongoose.Model<ProductDoc> {
+  build(attrs: ProductAttrs): ProductDoc;
 }
 
 const productSchema = new mongoose.Schema(
@@ -47,11 +47,11 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-productSchema.statics.build = (attrs: ProductsAttrs) => {
+productSchema.statics.build = (attrs: ProductAttrs) => {
   return new Product(attrs);
 };
 
-const Product = mongoose.model<ProductsDoc, ProductsModel>(
+const Product = mongoose.model<ProductDoc, ProductModel>(
   'Products',
   productSchema
 );
