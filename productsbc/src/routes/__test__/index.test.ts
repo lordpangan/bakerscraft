@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 
-it('can fetch a list of tickets', async () => {
+it('can fetch a list of products', async () => {
   await request(app)
     .post('/api/products')
     .set('Cookie', global.signinAdmin())
