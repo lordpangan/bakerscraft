@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
+import { randomBytes } from 'crypto';
 
 declare global {
   namespace NodeJS {
@@ -67,7 +68,7 @@ global.signinAdmin = () => {
 global.signinCust = () => {
   // Build a JWT payload. {id,email}
   const payload = {
-    id: '123edsadsad',
+    id: randomBytes(8).toString('hex'),
     email: 'test@test.com',
     auth: 'customer',
   };
