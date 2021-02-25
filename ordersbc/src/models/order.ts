@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@lordpangan/common';
-import { ProductDoc } from './product';
+import { ProductDoc, Product } from './product';
 
 export { OrderStatus };
 
 interface ProductOrderDoc {
-  product: ProductDoc;
+  productId: ProductDoc;
   quantity: number;
 }
 
@@ -30,7 +30,7 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
 const orderedProductSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
+    ref: 'Products',
   },
   quantity: {
     type: Number,
