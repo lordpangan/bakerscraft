@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
-import { Order, OrderStatus } from '../../models/order';
+import { Order } from '../../models/order';
 import { Product } from '../../models/product';
 
 it('returns a status other than 401 if the user is signed in', async () => {
@@ -101,3 +101,36 @@ it('creates an order', async () => {
   order = await Order.find();
   expect(order.length).toEqual(1);
 });
+
+it('subtracts the ordered quantity from the stock', async () => {
+  const product1 = Product.build({
+    title: 'chocolate',
+    price: 15,
+    quantity: 5,
+  });
+  await product1.save();
+
+  const product2 = Product.build({
+    title: 'flour',
+    price: 300,
+    quantity: 10,
+  });
+  await product2.save();
+
+  const req = await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signinCust())
+    .send({
+      productsId: [
+        { products: product1, quantity: 2 },
+        { products: product2, quantity: 8 },
+      ],
+    })
+    .expect(201);
+
+  const res = await Product.find({});
+  expect(res[0].quantity).toEqual(3);
+  expect(res[1].quantity).toEqual(2);
+});
+
+it.todo('emits an order created event');
