@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import {
   requireAuth,
-  requireAuthAdmin,
   validateRequest,
   NotFoundError,
   BadRequestError,
@@ -33,22 +31,31 @@ router.post(
     // Check the product the customer is trying to order in if In-Stock
     var products = [];
 
-    for (var productId in productsId) {
+    for (var prodId in productsId) {
       var product: ProductDoc;
 
-      product = await Product.findById(productsId[productId].products.id);
+      product = await Product.findById(productsId[prodId].products.id);
 
       if (!product) {
         throw new NotFoundError();
       }
 
-      if (product.quantity < productsId[productId].quantity) {
+      if (product.quantity < productsId[prodId].quantity) {
         throw new BadRequestError('Out of Stock!');
       }
 
+      // Subtract the ordered quantity from stock
+      const diff = product.quantity - productsId[prodId].quantity;
+
+      product.set({
+        quantity: diff,
+      });
+
+      await product.save();
+
       products.push({
-        product: product,
-        quantity: productsId[productId].quantity,
+        productId: product,
+        quantity: productsId[prodId].quantity,
       });
     }
 
