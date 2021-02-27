@@ -14,6 +14,15 @@ const buildProduct = async (item: string) => {
   return product;
 };
 
+it('returns a status other than 401 if the user is signed in', async () => {
+  const response = await request(app)
+    .get('/api/orders')
+    .set('Cookie', global.signinCust())
+    .send({});
+
+  expect(response.status).not.toEqual(401);
+});
+
 it('fetches orders for a particular user', async () => {
   // Create three products
   const prodOne = await buildProduct('chocolate');
