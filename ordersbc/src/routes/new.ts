@@ -9,6 +9,8 @@ import {
 } from '@lordpangan/common';
 import { Product, ProductDoc } from '../models/product';
 import { Order } from '../models/order';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -30,11 +32,14 @@ router.post(
 
     // Check the product the customer is trying to order in if In-Stock
     var products = [];
+    var productsStr = [];
 
     for (var prodId in productsId) {
       var product: ProductDoc;
+      var productStr: string;
 
       product = await Product.findById(productsId[prodId].products.id);
+      productStr = productsId[prodId].products.id;
 
       if (!product) {
         throw new NotFoundError();
@@ -45,16 +50,22 @@ router.post(
       }
 
       // Subtract the ordered quantity from stock
-      const diff = product.quantity - productsId[prodId].quantity;
+      // const diff = product.quantity - productsId[prodId].quantity;
 
-      product.set({
-        quantity: diff,
-      });
+      // product.set({
+      //   quantity: diff,
+      // });
 
-      await product.save();
+      // await product.save();
 
       products.push({
         productId: product,
+        quantity: productsId[prodId].quantity,
+      });
+
+      productsStr.push({
+        productId: productStr,
+        price: productsId[prodId].products.price,
         quantity: productsId[prodId].quantity,
       });
     }
@@ -73,6 +84,13 @@ router.post(
     await order.save();
 
     // Publish an event that an order was created
+    new OrderCreatedPublisher(natsWrapper.client).publish({
+      orderId: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(),
+      products: productsStr,
+    });
 
     res.status(201).send({ order });
   }
