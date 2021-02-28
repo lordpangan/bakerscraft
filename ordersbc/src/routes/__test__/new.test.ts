@@ -102,35 +102,36 @@ it('creates an order', async () => {
   expect(order.length).toEqual(1);
 });
 
-it('subtracts the ordered quantity from the stock', async () => {
-  const product1 = Product.build({
-    title: 'chocolate',
-    price: 15,
-    quantity: 5,
-  });
-  await product1.save();
+it.todo('subtracts the ordered quantity from the stock');
+// it('subtracts the ordered quantity from the stock', async () => {
+//   const product1 = Product.build({
+//     title: 'chocolate',
+//     price: 15,
+//     quantity: 5,
+//   });
+//   await product1.save();
 
-  const product2 = Product.build({
-    title: 'flour',
-    price: 300,
-    quantity: 10,
-  });
-  await product2.save();
+//   const product2 = Product.build({
+//     title: 'flour',
+//     price: 300,
+//     quantity: 10,
+//   });
+//   await product2.save();
 
-  const req = await request(app)
-    .post('/api/orders')
-    .set('Cookie', global.signinCust())
-    .send({
-      productsId: [
-        { products: product1, quantity: 2 },
-        { products: product2, quantity: 8 },
-      ],
-    })
-    .expect(201);
+//   const req = await request(app)
+//     .post('/api/orders')
+//     .set('Cookie', global.signinCust())
+//     .send({
+//       productsId: [
+//         { products: product1, quantity: 2 },
+//         { products: product2, quantity: 8 },
+//       ],
+//     })
+//     .expect(201);
 
-  const res = await Product.find({});
-  expect(res[0].quantity).toEqual(3);
-  expect(res[1].quantity).toEqual(2);
-});
+//   const res = await Product.find({});
+//   expect(res[0].quantity).toEqual(3);
+//   expect(res[1].quantity).toEqual(2);
+// });
 
 it.todo('emits an order created event');
