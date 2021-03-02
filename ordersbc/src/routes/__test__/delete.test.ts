@@ -3,6 +3,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Product } from '../../models/product';
 import { Order, OrderStatus } from '../../models/order';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns a status other than 401 if the user is signed in', async () => {
   // Create a products
@@ -13,13 +14,23 @@ it('returns a status other than 401 if the user is signed in', async () => {
   });
   await product1.save();
 
+  const product2 = Product.build({
+    title: 'flour',
+    price: 10,
+    quantity: 8,
+  });
+  await product2.save();
+
   // Make a request to build an order with this ticket
   const userOne = global.signinCust();
   const { body: order } = await request(app)
     .post('/api/orders')
     .set('Cookie', userOne)
     .send({
-      productsId: [{ products: product1, quantity: 2 }],
+      productsId: [
+        { products: product1, quantity: 2 },
+        { products: product2, quantity: 3 },
+      ],
     })
     .expect(201);
 
@@ -81,4 +92,31 @@ it('marks an order as cancelled', async () => {
   expect(updatedOrder.status).toEqual(OrderStatus.Cancelled);
 });
 
-it.todo('emits an order cancelled event');
+it('emits an order cancelled event', async () => {
+  // create a ticket with ticket model
+  const product1 = Product.build({
+    title: 'chocolate',
+    price: 15,
+    quantity: 5,
+  });
+  await product1.save();
+
+  // make a request to create an order
+  const userOne = global.signinCust();
+  const { body: order } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', userOne)
+    .send({
+      productsId: [{ products: product1, quantity: 2 }],
+    })
+    .expect(201);
+
+  // Make a request to cancel the order
+  await request(app)
+    .delete(`/api/orders/${order.order.id}`)
+    .set('Cookie', userOne)
+    .send()
+    .expect(204);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
