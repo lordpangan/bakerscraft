@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 interface ProductAttrs {
+  id: string;
   title: string;
   price: number;
   quantity: number;
@@ -44,7 +45,12 @@ const productSchema = new mongoose.Schema(
 );
 
 productSchema.statics.build = (attrs: ProductAttrs) => {
-  return new Product(attrs);
+  return new Product({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price,
+    quantity: attrs.quantity,
+  });
 };
 
 const Product = mongoose.model<ProductDoc, ProductModel>(
