@@ -35,11 +35,8 @@ router.post(
     var productsStr = [];
 
     for (var prodId in productsId) {
-      var product: ProductDoc;
-      var productStr: string;
-
-      product = await Product.findById(productsId[prodId].products.id);
-      productStr = productsId[prodId].products.id;
+      var product = await Product.findById(productsId[prodId].products!.id);
+      var productStr = productsId[prodId].products.id;
 
       if (!product) {
         throw new NotFoundError();
