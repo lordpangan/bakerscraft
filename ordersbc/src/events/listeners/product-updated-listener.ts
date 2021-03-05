@@ -8,7 +8,7 @@ export class ProductUpdatedListener extends Listener<ProductUpdatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: ProductUpdatedEvent['data'], msg: Message) {
-    const product = await Product.findById(data.id);
+    const product = await Product.findByEvent(data);
 
     if (!product) {
       throw new Error('Ticket not found');
