@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { OrderStatus } from '@lordpangan/common';
 import { ProductDoc, Product } from './product';
 
@@ -21,6 +22,7 @@ interface OrderDoc extends mongoose.Document {
   status: OrderStatus;
   expiresAt: Date;
   products: ProductOrderDoc[];
+  version: number;
 }
 
 interface OrderModel extends mongoose.Model<OrderDoc> {
@@ -65,6 +67,9 @@ const orderSchema = new mongoose.Schema(
     },
   }
 );
+
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
