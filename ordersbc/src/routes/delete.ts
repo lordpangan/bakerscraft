@@ -43,6 +43,7 @@ router.delete(
     new OrderCancelledPublisher(natsWrapper.client).publish({
       orderId: order.id,
       products: productsStr,
+      version: order.version,
     });
 
     res.status(204).send(order);
