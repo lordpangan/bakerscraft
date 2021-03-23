@@ -8,6 +8,7 @@ import { natsWrapper } from '../../nats-wrapper';
 it('returns a status other than 401 if the user is signed in', async () => {
   // Create a products
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,
@@ -15,6 +16,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
   await product1.save();
 
   const product2 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'flour',
     price: 10,
     quantity: 8,
@@ -64,6 +66,7 @@ it('returns an error if the order Id is not a proper mongodb id object', async (
 it('marks an order as cancelled', async () => {
   // create a ticket with ticket model
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,
@@ -95,6 +98,7 @@ it('marks an order as cancelled', async () => {
 it('emits an order cancelled event', async () => {
   // create a ticket with ticket model
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,

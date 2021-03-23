@@ -6,6 +6,7 @@ import { Product } from '../../models/product';
 it('returns a status other than 401 if the user is signed in', async () => {
   // Create a products
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,
@@ -35,6 +36,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
 it('fetches ther order', async () => {
   // Create a products
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,
@@ -64,6 +66,7 @@ it('fetches ther order', async () => {
 it('returns an error if one user tries to fetch another users order', async () => {
   // Create a products
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,

@@ -1,9 +1,11 @@
+import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Product } from '../../models/product';
 
 const buildProduct = async (item: string) => {
   const product = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: item,
     price: 20,
     quantity: 1,

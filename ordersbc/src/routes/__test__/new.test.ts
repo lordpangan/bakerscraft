@@ -28,6 +28,7 @@ it('returns an error if the product does not exists', async () => {
 
 it('returns an error if the ordered product quantity is less than and stock', async () => {
   const product = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 20,
     quantity: 1,
@@ -45,6 +46,7 @@ it('returns an error if the ordered product quantity is less than and stock', as
 
 it('returns an error if the ordered product quantity is less than and stock for multiple orders', async () => {
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 20,
     quantity: 10,
@@ -52,6 +54,7 @@ it('returns an error if the ordered product quantity is less than and stock for 
   await product1.save();
 
   const product2 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'flour',
     price: 300,
     quantity: 5,
@@ -75,6 +78,7 @@ it('creates an order', async () => {
   expect(order.length).toEqual(0);
 
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,
@@ -82,6 +86,7 @@ it('creates an order', async () => {
   await product1.save();
 
   const product2 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'flour',
     price: 300,
     quantity: 10,
@@ -137,6 +142,7 @@ it.todo('subtracts the ordered quantity from the stock');
 
 it('emits an order created event', async () => {
   const product1 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
     price: 15,
     quantity: 5,
@@ -144,6 +150,7 @@ it('emits an order created event', async () => {
   await product1.save();
 
   const product2 = Product.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: 'flour',
     price: 300,
     quantity: 10,
