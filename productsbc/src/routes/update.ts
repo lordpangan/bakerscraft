@@ -47,7 +47,7 @@ router.put(
       quantity: product.quantity,
       userId: product.userId,
       version: product.version,
-      orderId: product.orderId,
+      orderId: product.orderId || undefined,
     });
 
     res.send({ product });
