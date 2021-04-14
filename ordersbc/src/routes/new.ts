@@ -35,8 +35,8 @@ router.post(
     var productsStr = [];
 
     for (var prodId in productsId) {
-      var product = await Product.findById(productsId[prodId].products!.id);
-      var productStr = productsId[prodId].products.id;
+      var product = await Product.findById(productsId[prodId].productId);
+      var productStr = productsId[prodId].productId;
 
       if (!product) {
         throw new NotFoundError();
@@ -62,7 +62,7 @@ router.post(
 
       productsStr.push({
         productId: productStr,
-        price: productsId[prodId].products.price,
+        price: product.price,
         quantity: productsId[prodId].quantity,
       });
     }

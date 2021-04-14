@@ -30,8 +30,8 @@ it('returns a status other than 401 if the user is signed in', async () => {
     .set('Cookie', userOne)
     .send({
       productsId: [
-        { products: product1, quantity: 2 },
-        { products: product2, quantity: 3 },
+        { productId: product1.id, quantity: 2 },
+        { productId: product2.id, quantity: 3 },
       ],
     })
     .expect(201);
@@ -79,7 +79,7 @@ it('marks an order as cancelled', async () => {
     .post('/api/orders')
     .set('Cookie', userOne)
     .send({
-      productsId: [{ products: product1, quantity: 2 }],
+      productsId: [{ productId: product1.id, quantity: 2 }],
     })
     .expect(201);
 
@@ -111,7 +111,7 @@ it('emits an order cancelled event', async () => {
     .post('/api/orders')
     .set('Cookie', userOne)
     .send({
-      productsId: [{ products: product1, quantity: 2 }],
+      productsId: [{ productId: product1.id, quantity: 2 }],
     })
     .expect(201);
 

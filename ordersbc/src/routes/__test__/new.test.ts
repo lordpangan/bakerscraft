@@ -39,7 +39,7 @@ it('returns an error if the ordered product quantity is less than and stock', as
     .post('/api/orders')
     .set('Cookie', global.signinCust())
     .send({
-      productsId: [{ products: product, quantity: 2 }],
+      productsId: [{ productId: product.id, quantity: 2 }],
     })
     .expect(400);
 });
@@ -66,8 +66,8 @@ it('returns an error if the ordered product quantity is less than and stock for 
     .set('Cookie', global.signinCust())
     .send({
       productsId: [
-        { products: product1, quantity: 2 },
-        { products: product2, quantity: 8 },
+        { productId: product1.id, quantity: 2 },
+        { productId: product2.id, quantity: 8 },
       ],
     })
     .expect(400);
@@ -98,8 +98,8 @@ it('creates an order', async () => {
     .set('Cookie', global.signinCust())
     .send({
       productsId: [
-        { products: product1, quantity: 2 },
-        { products: product2, quantity: 8 },
+        { productId: product1.id, quantity: 2 },
+        { productId: product2.id, quantity: 8 },
       ],
     })
     .expect(201);
@@ -107,38 +107,6 @@ it('creates an order', async () => {
   order = await Order.find();
   expect(order.length).toEqual(1);
 });
-
-it.todo('subtracts the ordered quantity from the stock');
-// it('subtracts the ordered quantity from the stock', async () => {
-//   const product1 = Product.build({
-//     title: 'chocolate',
-//     price: 15,
-//     quantity: 5,
-//   });
-//   await product1.save();
-
-//   const product2 = Product.build({
-//     title: 'flour',
-//     price: 300,
-//     quantity: 10,
-//   });
-//   await product2.save();
-
-//   const req = await request(app)
-//     .post('/api/orders')
-//     .set('Cookie', global.signinCust())
-//     .send({
-//       productsId: [
-//         { products: product1, quantity: 2 },
-//         { products: product2, quantity: 8 },
-//       ],
-//     })
-//     .expect(201);
-
-//   const res = await Product.find({});
-//   expect(res[0].quantity).toEqual(3);
-//   expect(res[1].quantity).toEqual(2);
-// });
 
 it('emits an order created event', async () => {
   const product1 = Product.build({
@@ -162,8 +130,8 @@ it('emits an order created event', async () => {
     .set('Cookie', global.signinCust())
     .send({
       productsId: [
-        { products: product1, quantity: 2 },
-        { products: product2, quantity: 8 },
+        { productId: product1.id, quantity: 2 },
+        { productId: product2.id, quantity: 8 },
       ],
     })
     .expect(201);

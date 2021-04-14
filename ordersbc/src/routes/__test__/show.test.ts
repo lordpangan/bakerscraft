@@ -19,7 +19,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
     .post('/api/orders')
     .set('Cookie', userOne)
     .send({
-      productsId: [{ products: product1, quantity: 2 }],
+      productsId: [{ productId: product1.id, quantity: 2 }],
     })
     .expect(201);
 
@@ -49,7 +49,7 @@ it('fetches ther order', async () => {
     .post('/api/orders')
     .set('Cookie', userOne)
     .send({
-      productsId: [{ products: product1, quantity: 2 }],
+      productsId: [{ productId: product1.id, quantity: 2 }],
     })
     .expect(201);
 
@@ -79,7 +79,7 @@ it('returns an error if one user tries to fetch another users order', async () =
     .post('/api/orders')
     .set('Cookie', userOne)
     .send({
-      productsId: [{ products: product1, quantity: 2 }],
+      productsId: [{ productId: product1.id, quantity: 2 }],
     })
     .expect(201);
 

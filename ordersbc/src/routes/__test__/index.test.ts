@@ -39,7 +39,7 @@ it('fetches orders for a particular user', async () => {
     .post('/api/orders')
     .set('Cookie', userOne)
     .send({
-      productsId: [{ products: prodOne, quantity: 1 }],
+      productsId: [{ productId: prodOne.id, quantity: 1 }],
     })
     .expect(201);
   // Create two order as User#2
@@ -48,8 +48,8 @@ it('fetches orders for a particular user', async () => {
     .set('Cookie', userTwo)
     .send({
       productsId: [
-        { products: prodTwo, quantity: 1 },
-        { products: prodThree, quantity: 1 },
+        { productId: prodTwo.id, quantity: 1 },
+        { productId: prodThree.id, quantity: 1 },
       ],
     })
     .expect(201);
@@ -58,7 +58,7 @@ it('fetches orders for a particular user', async () => {
     .post('/api/orders')
     .set('Cookie', userTwo)
     .send({
-      productsId: [{ products: prodFour, quantity: 1 }],
+      productsId: [{ productId: prodFour.id, quantity: 1 }],
     })
     .expect(201);
 
