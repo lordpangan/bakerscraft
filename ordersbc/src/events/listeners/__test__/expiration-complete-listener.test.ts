@@ -27,6 +27,7 @@ const setup = async () => {
         quantity: 3,
       },
     ],
+    paymentRef: 'TestingRef',
   });
   await order.save();
 

@@ -15,6 +15,8 @@ interface OrderAttrs {
   status: OrderStatus;
   expiresAt: Date;
   products: ProductOrderDoc[];
+  paymentRef: string;
+  paymentRes?: string;
 }
 
 interface OrderDoc extends mongoose.Document {
@@ -23,6 +25,8 @@ interface OrderDoc extends mongoose.Document {
   expiresAt: Date;
   products: ProductOrderDoc[];
   version: number;
+  paymentRef: string;
+  paymentRes?: string;
 }
 
 interface OrderModel extends mongoose.Model<OrderDoc> {
@@ -57,6 +61,13 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Date,
     },
     products: [orderedProductSchema],
+    paymentRef: {
+      type: String,
+      required: true,
+    },
+    paymentRes: {
+      type: String,
+    },
   },
   {
     toJSON: {

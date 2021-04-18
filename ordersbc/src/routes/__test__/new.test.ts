@@ -5,14 +5,14 @@ import { Order } from '../../models/order';
 import { Product } from '../../models/product';
 import { natsWrapper } from '../../nats-wrapper';
 
-it('returns a status other than 401 if the user is signed in', async () => {
-  const response = await request(app)
-    .post('/api/orders')
-    .set('Cookie', global.signinCust())
-    .send({});
+// it('returns a status other than 401 if the user is signed in', async () => {
+//   const response = await request(app)
+//     .post('/api/orders')
+//     .set('Cookie', global.signinCust())
+//     .send({});
 
-  expect(response.status).not.toEqual(401);
-});
+//   expect(response.status).not.toEqual(401);
+// });
 
 it('returns an error if the product does not exists', async () => {
   const productId = mongoose.Types.ObjectId();
@@ -21,7 +21,13 @@ it('returns an error if the product does not exists', async () => {
     .post('/api/orders')
     .set('Cookie', global.signinCust())
     .send({
-      productsId: [{ products: productId, quantity: 2 }],
+      productsId: [
+        {
+          products: productId,
+          quantity: 2,
+        },
+      ],
+      paymentRef: 'TestingRef',
     })
     .expect(404);
 });
@@ -35,16 +41,17 @@ it('returns an error if the ordered product quantity is less than and stock', as
   });
   await product.save();
 
-  await request(app)
+  const res = await request(app)
     .post('/api/orders')
     .set('Cookie', global.signinCust())
     .send({
       productsId: [{ productId: product.id, quantity: 2 }],
+      paymentRef: 'TestingRef',
     })
     .expect(400);
 });
 
-it('returns an error if the ordered product quantity is less than and stock for multiple orders', async () => {
+it('returns an error if the ordered product quantity is greater than and stock for multiple orders', async () => {
   const product1 = Product.build({
     id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
@@ -61,7 +68,7 @@ it('returns an error if the ordered product quantity is less than and stock for 
   });
   await product2.save();
 
-  await request(app)
+  const res = await request(app)
     .post('/api/orders')
     .set('Cookie', global.signinCust())
     .send({
@@ -69,6 +76,7 @@ it('returns an error if the ordered product quantity is less than and stock for 
         { productId: product1.id, quantity: 2 },
         { productId: product2.id, quantity: 8 },
       ],
+      paymentRef: 'TestingRef',
     })
     .expect(400);
 });
@@ -101,6 +109,7 @@ it('creates an order', async () => {
         { productId: product1.id, quantity: 2 },
         { productId: product2.id, quantity: 8 },
       ],
+      paymentRef: 'TestingRef',
     })
     .expect(201);
 
@@ -109,6 +118,7 @@ it('creates an order', async () => {
 });
 
 it('emits an order created event', async () => {
+  const payment = 'testingPaymentRef';
   const product1 = Product.build({
     id: mongoose.Types.ObjectId().toHexString(),
     title: 'chocolate',
@@ -133,6 +143,7 @@ it('emits an order created event', async () => {
         { productId: product1.id, quantity: 2 },
         { productId: product2.id, quantity: 8 },
       ],
+      paymentRef: 'TestingRef',
     })
     .expect(201);
 

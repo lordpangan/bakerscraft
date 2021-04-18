@@ -45,6 +45,7 @@ const setup = async () => {
         quantity: 7,
       },
     ],
+    paymentRef: 'TestingRef',
   };
 
   // @ts-ignore

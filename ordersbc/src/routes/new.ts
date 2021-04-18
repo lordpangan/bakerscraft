@@ -25,10 +25,14 @@ router.post(
       .isEmpty()
       .isArray()
       .withMessage('ProductId must be provided'),
+    body('paymentRef')
+      .not()
+      .isEmpty()
+      .withMessage('Payment Referrence must be provided'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { productsId } = req.body;
+    const { productsId, paymentRef, paymentRes } = req.body;
 
     // Check the product the customer is trying to order in if In-Stock
     var products = [];
@@ -45,15 +49,6 @@ router.post(
       if (product.quantity < productsId[prodId].quantity) {
         throw new BadRequestError('Out of Stock!');
       }
-
-      // Subtract the ordered quantity from stock
-      // const diff = product.quantity - productsId[prodId].quantity;
-
-      // product.set({
-      //   quantity: diff,
-      // });
-
-      // await product.save();
 
       products.push({
         productId: product,
@@ -77,6 +72,8 @@ router.post(
       status: OrderStatus.Created,
       expiresAt: expiration,
       products: products,
+      paymentRef,
+      paymentRes,
     });
     await order.save();
 
@@ -88,6 +85,8 @@ router.post(
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(),
       products: productsStr,
+      paymentRef,
+      paymentRes,
     });
 
     res.status(201).send({ order });
