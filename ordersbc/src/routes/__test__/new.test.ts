@@ -5,14 +5,14 @@ import { Order } from '../../models/order';
 import { Product } from '../../models/product';
 import { natsWrapper } from '../../nats-wrapper';
 
-// it('returns a status other than 401 if the user is signed in', async () => {
-//   const response = await request(app)
-//     .post('/api/orders')
-//     .set('Cookie', global.signinCust())
-//     .send({});
+it('returns a status other than 401 if the user is signed in', async () => {
+  const response = await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signinCust())
+    .send({});
 
-//   expect(response.status).not.toEqual(401);
-// });
+  expect(response.status).not.toEqual(401);
+});
 
 it('returns an error if the product does not exists', async () => {
   const productId = mongoose.Types.ObjectId();
@@ -73,8 +73,8 @@ it('returns an error if the ordered product quantity is greater than and stock f
     .set('Cookie', global.signinCust())
     .send({
       productsId: [
-        { productId: product1.id, quantity: 2 },
-        { productId: product2.id, quantity: 8 },
+        { productId: product1.id, quantity: 2, price: 10 },
+        { productId: product2.id, quantity: 8, price: 15 },
       ],
       paymentRef: 'TestingRef',
     })
@@ -106,8 +106,8 @@ it('creates an order', async () => {
     .set('Cookie', global.signinCust())
     .send({
       productsId: [
-        { productId: product1.id, quantity: 2 },
-        { productId: product2.id, quantity: 8 },
+        { productId: product1.id, quantity: 2, price: product1.price },
+        { productId: product2.id, quantity: 8, price: product2.price },
       ],
       paymentRef: 'TestingRef',
     })

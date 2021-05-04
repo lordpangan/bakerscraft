@@ -8,6 +8,7 @@ export { OrderStatus };
 interface ProductOrderDoc {
   productId: ProductDoc;
   quantity: number;
+  price: number;
 }
 
 interface OrderAttrs {
@@ -39,6 +40,11 @@ const orderedProductSchema = new mongoose.Schema({
     ref: 'Products',
   },
   quantity: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  price: {
     type: Number,
     required: true,
     min: 0,

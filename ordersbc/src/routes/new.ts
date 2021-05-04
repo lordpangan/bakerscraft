@@ -52,6 +52,7 @@ router.post(
 
       products.push({
         productId: product,
+        price: product.price,
         quantity: productsId[prodId].quantity,
       });
 

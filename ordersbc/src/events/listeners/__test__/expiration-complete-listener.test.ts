@@ -25,6 +25,7 @@ const setup = async () => {
       {
         productId: product.id,
         quantity: 3,
+        price: product.price,
       },
     ],
     paymentRef: 'TestingRef',

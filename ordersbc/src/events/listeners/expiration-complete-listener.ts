@@ -35,6 +35,7 @@ export class ExpirationCompleteListener extends Listener<
     for (var prodId in order.products) {
       productsStr.push({
         productId: order.products[prodId].productId._id,
+        price: order.products[prodId].price,
         quantity: order.products[prodId].quantity,
       });
     }

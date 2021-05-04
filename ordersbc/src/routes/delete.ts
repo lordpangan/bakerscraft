@@ -33,6 +33,7 @@ router.delete(
       productsStr.push({
         productId: order.products[prodId].productId._id,
         quantity: order.products[prodId].quantity,
+        price: order.products[prodId].price,
       });
     }
 
