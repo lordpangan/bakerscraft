@@ -3,6 +3,9 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
+import { updatePaymentsRouter } from './routes/update';
+import { indexPaymentsRouter } from './routes/index';
+
 import { NotFoundError, errorHandler, currentUser } from '@lordpangan/common';
 
 const app = express();
@@ -15,6 +18,9 @@ app.use(
   })
 );
 app.use(currentUser);
+
+app.use(indexPaymentsRouter);
+app.use(updatePaymentsRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
