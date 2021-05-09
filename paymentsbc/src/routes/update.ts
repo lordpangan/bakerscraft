@@ -9,6 +9,8 @@ import {
   OrderStatus,
 } from '@lordpangan/common';
 import { Order } from '../models/order';
+import { PaymentVerifiedPublisher } from '../events/publishers/payment-verified-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -41,6 +43,11 @@ router.put(
     });
 
     await order.save();
+
+    await new PaymentVerifiedPublisher(natsWrapper.client).publish({
+      orderId: order.id,
+      status: order.status,
+    });
 
     res.send({ order });
   }
