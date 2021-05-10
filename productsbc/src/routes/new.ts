@@ -19,10 +19,10 @@ router.post(
     body('title').not().isEmpty().withMessage('Title is required'),
     body('price')
       .isFloat({ gt: 0 })
-      .withMessage('Price must be greater thank 0'),
+      .withMessage('Price must be greater than 0'),
     body('quantity')
       .isInt({ gt: -1 })
-      .withMessage('Quantity must be greater thank 0'),
+      .withMessage('Quantity must be greater than 0'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
