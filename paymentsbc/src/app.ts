@@ -5,6 +5,7 @@ import cookieSession from 'cookie-session';
 
 import { updatePaymentsRouter } from './routes/update';
 import { indexPaymentsRouter } from './routes/index';
+import { ShowAllPaymentsRouter } from './routes/showall';
 
 import { NotFoundError, errorHandler, currentUser } from '@lordpangan/common';
 
@@ -20,6 +21,7 @@ app.use(
 app.use(currentUser);
 
 app.use(indexPaymentsRouter);
+app.use(ShowAllPaymentsRouter);
 app.use(updatePaymentsRouter);
 
 app.all('*', async (req, res) => {
