@@ -1,19 +1,42 @@
-import buildClient from '../api/build-client';
+import Link from 'next/link';
+import { useState } from 'react';
 
-const LandingPage = ({ currentUser }) => {
-  console.log(currentUser);
-  return currentUser ? (
-    <h1>You are signed in</h1>
-  ) : (
-    <h1>You are NOT signed in</h1>
+const LandingPage = ({ currentUser, products }) => {
+  const productList = products.map((product) => {
+    return (
+      <tr key={product.id}>
+        <td>{product.title}</td>
+        <td>{product.price}</td>
+        <td>{product.quantity}</td>
+        <td>
+          <button>Add</button>
+        </td>
+      </tr>
+    );
+  });
+
+  return (
+    <div>
+      <h1>Products</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Add to Cart</th>
+          </tr>
+        </thead>
+        <tbody>{productList}</tbody>
+      </table>
+    </div>
   );
 };
 
-LandingPage.getInitialProps = async (context) => {
-  const client = buildClient(context);
-  const { data } = await client.get('/api/users/currentuser');
+LandingPage.getInitialProps = async (context, client, currentUser) => {
+  const { data } = await client.get('/api/products/');
 
-  return data;
+  return { products: data };
 };
 
 export default LandingPage;
