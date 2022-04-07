@@ -1,12 +1,12 @@
 # WIP: Bakerscraft
-Full stack project using JS Express and React.
+Full stack project using JS Express, React and Event driven architechture.
 Consisting of 6 services:
-- auth - for users authentication
-- expiration - for order expiration
+- auth - user authentication sign up, sign in, sign out and auth
+- expiration - watches for orders to be created , cancels them after 30 minutes
 - client - Server side rendering of UI
-- orders - for Orders
+- orders - transaction id, products id, no. of products
 - payments - for Payment
-- products - for Products
+- products - related to any product creation or editing - price, description, stock count
 
 Updates:
 - Able to finish back-end part.
