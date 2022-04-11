@@ -1,5 +1,5 @@
 # WIP: Bakerscraft
-Full stack project using JS Express, React and Event driven architechture.
+Full stack project using JS Express, React and Event driven architecture.
 Consisting of 6 services:
 - auth - user authentication sign up, sign in, sign out and auth
 - expiration - watches for orders to be created , cancels them after 30 minutes
